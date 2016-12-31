@@ -1,2 +1,2 @@
 # GoRestaurants
-Web service for personalized restaurant recommendation
+Web service for personalized restaurant recommendation.
