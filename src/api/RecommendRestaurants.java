@@ -34,7 +34,8 @@ public class RecommendRestaurants extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	private static DBConnection connection = new MongoDBConnection();
+	// private static DBConnection connection = new MongoDBConnection();
+	private static DBConnection connection = new MySQLDBConnection();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

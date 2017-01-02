@@ -45,7 +45,8 @@ public class SearchRestaurants extends HttpServlet {
 			double lon = Double.parseDouble(request.getParameter("lon"));
 			String userId = request.getParameter("user_id");
 
-			DBConnection connection = new MongoDBConnection();
+			// DBConnection connection = new MongoDBConnection();
+			DBConnection connection = new MySQLDBConnection();
 			array = connection.searchRestaurants(userId, lat, lon);
 		}
 		RpcParser.writeOutput(response, array);
