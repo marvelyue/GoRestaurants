@@ -200,4 +200,16 @@ public class MongoDBConnection implements DBConnection {
 		String lastName = document.getString("last_name");
 		return firstName + " " + lastName;
 	}
+
+	@Override
+	public Boolean verifyUserId(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean signupLogin(String userId, String password, String firstName, String lastName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

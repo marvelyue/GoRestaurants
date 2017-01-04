@@ -13,6 +13,7 @@ var lat           = 37.38;
  */
 function init() {
   // Register event listeners
+  $('signup-switch').addEventListener('click', toSignup);
   $('login-btn').addEventListener('click', login);
   $('nearby-btn').addEventListener('click', loadNearbyRestaurants);
   $('fav-btn').addEventListener('click', loadFavoriteRestaurants);
@@ -108,12 +109,133 @@ function onPositionUpdated(position) {
 
 function onLoadPositionFailed() {
   console.warn('navigator.geolocation is not available');
-  loadNearbyRestaurants();
+  getLocationFromIP();
+}
+
+function getLocationFromIP() {
+	  // Get location from http://ipinfo.io/json
+	  var url = 'http://ipinfo.io/json'
+	  var req = null;
+	  ajax('GET', url, req,
+	    function (res) {
+	      var result = JSON.parse(res);
+	      if ('loc' in result) {
+	        var loc = result.loc.split(',');
+	        lat = loc[0];
+	        lng = loc[1];
+	      } else {
+	        console.warn('Getting location by IP failed.');
+	      }
+	      loadNearbyRestaurants();
+	    }
+	  );
+	}
+
+
+//-----------------------------------
+//Signup
+//-----------------------------------
+
+function toSignup() {
+clearLoginError();
+$('username').value = '';
+$('password').value = '';
+$('firstName').value = '';
+$('lastName').value = '';
+var signupSwitch = $('signup-switch');
+var loginBtn = $('login-btn');
+var signupInfo = $('signupInfo');
+showElement(signupInfo);
+// change text
+signupSwitch.innerHTML = 'Login';
+loginBtn.innerHTML = 'Sign up';
+// remove events
+signupSwitch.removeEventListener('click', toSignup);
+loginBtn.removeEventListener('click', login);
+// add new events
+signupSwitch.addEventListener('click', toLogin);
+loginBtn.addEventListener('click', signup);
+}
+
+function signup() {
+var username = $('username').value;
+var password = $('password').value;
+var firstName = $('firstName').value;
+var lastName = $('lastName').value;
+
+if (username === '') {
+	showSignupError('username');
+	return;
+} else if (password === '') {
+    showSignupError('password');
+	return;
+} else if (firstName === '') {
+    showSignupError('firt name');
+	return;
+} else if (lastName === '') {
+    showSignupError('last name');
+	return;
+}
+
+password = md5(username + md5(password));
+  
+//The request parameters
+var url = './SignupServlet';
+var req = JSON.stringify({
+	user_id: username,
+	password: password,
+	firstName: firstName,
+	lastName: lastName
+});
+
+ajax('POST', url, req,
+	// successful callback
+	function (res) {
+    	var result = JSON.parse(res);
+      
+    	// successfully logged in
+    	if (result.status === 'OK') {
+    		toLogin();
+    		showSignupSuccess();
+    	}
+    },
+    // error
+    function () {
+    	showSignupError('signup');
+	}
+);
+}
+
+function showSignupSuccess() {
+$('login-error').innerHTML = 'Signup Successful';
+}
+
+function showSignupError(msg) {
+$('login-error').innerHTML = 'Invalid ' + msg;
 }
 
 //-----------------------------------
 //  Login
 //-----------------------------------
+
+function toLogin() {
+	clearLoginError();
+	$('username').value = '';
+	$('password').value = '';
+    var signupSwitch = $('signup-switch');
+    var loginBtn = $('login-btn');
+    var signupInfo = $('signupInfo');
+    hideElement(signupInfo);
+    // change text
+    signupSwitch.innerHTML = 'Sign up';
+    loginBtn.innerHTML = 'Login';
+    // remove events
+    signupSwitch.removeEventListener('click', toLogin);
+    loginBtn.removeEventListener('click', signup);
+    // add new events
+    signupSwitch.addEventListener('click', toSignup);
+    loginBtn.addEventListener('click', login);
+}
 
 function login() {
   var username = $('username').value;
@@ -269,7 +391,7 @@ function ajax(method, url, data, callback, errorHandler) {
  * API end point: [GET] /Dashi/restaurants?user_id=1111&lat=37.38&lon=-122.08
  */
 function loadNearbyRestaurants() {
-  console.log('loadNearbyRestaurants');
+//  console.log('loadNearbyRestaurants');
   activeBtn('nearby-btn');
 
   // The request parameters

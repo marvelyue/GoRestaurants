@@ -88,6 +88,20 @@ public interface DBConnection {
 	 * @return
 	 */
 	public Boolean verifyLogin(String userId, String password);
+	/**
+     * Verify if the userId exist.
+     * @param userId
+     * @return
+     */
+    public Boolean verifyUserId(String userId);
+    
+    /**
+     * Signup for the userId and password if userId not exist.
+     * @param userId
+     * @param password
+     * @return
+     */
+    public Boolean signupLogin(String userId, String password, String firstName, String lastName);
 
 	/**
 	 * Get user's name for the userId.

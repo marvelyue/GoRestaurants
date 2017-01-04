@@ -137,6 +137,10 @@ ul {
   text-align: right;
 }
 
+#login-form #signupInfo {
+  display: none;
+}
+
 #login-error {
   clear: both;
   color: #990000;
