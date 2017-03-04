@@ -6,3 +6,7 @@ Here is a demo of the walkthrough of a user story:
 ![img](gorestaurants.gif)
 
 GIF created by [LICEcap](http://www.cockos.com/licecap/).
+
+If you just want to take a brief scan of our service, please try the default profile:  
+username: 1111  
+password: 2222
